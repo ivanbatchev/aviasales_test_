@@ -1,0 +1,13 @@
+@import '../node_modules/normalize.css/normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+$background-main-color: #f3f7fa;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: $background-main-color;
+}
