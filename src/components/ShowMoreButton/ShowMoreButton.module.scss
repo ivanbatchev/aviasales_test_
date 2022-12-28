@@ -1,12 +1,16 @@
 .more {
   width: clamp(240px, 98%, 502px);
-  margin: 16px 0;
   height: 50px;
   background-color: #2196f3;
   border-radius: 5px;
   border: 1px solid #2196f3;
   text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 1.4px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
   color: white;
+  cursor: pointer;
 }

@@ -7,23 +7,31 @@ const JumpsCheckForm = () => {
     <aside className={classes.aside}>
       <form className={classes.form}>
         <h4>Количество пересадок</h4>
-        <label>
-          <input type="checkbox" />
-          Все
-        </label>
-        <label>
-          <input type="checkbox" />
-          Без пересадок
-        </label>
-        <label>
-          <input type="checkbox" />1 пересадка
-        </label>
-        <label>
-          <input type="checkbox" />2 пересадки
-        </label>
-        <label>
-          <input type="checkbox" />3 пересадки
-        </label>
+        <div className={classes.cbcontainer}>
+          <input type="checkbox" id="all" />
+          <span className={classes.checkmark}></span>
+          <label htmlFor="all">Все</label>
+        </div>
+        <div className={classes.cbcontainer}>
+          <input type="checkbox" id="nojumps" />
+          <span className={classes.checkmark}></span>
+          <label htmlFor="nojumps">Без пересадок</label>
+        </div>
+        <div className={classes.cbcontainer}>
+          <input type="checkbox" id="onejump" />
+          <span className={classes.checkmark}></span>
+          <label htmlFor="onejump">1 пересадка</label>
+        </div>
+        <div className={classes.cbcontainer}>
+          <input type="checkbox" id="twojumps" />
+          <span className={classes.checkmark}></span>
+          <label htmlFor="twojumps">2 пересадки</label>
+        </div>
+        <div className={classes.cbcontainer}>
+          <input type="checkbox" id="threejumps" />
+          <span className={classes.checkmark}></span>
+          <label htmlFor="threejumps">3 пересадки</label>
+        </div>
       </form>
     </aside>
   )

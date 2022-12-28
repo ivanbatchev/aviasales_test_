@@ -13,10 +13,16 @@
   align-items: center;
   height: 50px;
   background-color: white;
-  border: 1px solid rgb(212, 212, 212);
+  border: 1px solid #dfe5ec;
   width: clamp(100px, 33.33%, 168px);
   text-transform: uppercase;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
   font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }
 
 .wrapper .active {
