@@ -1,6 +1,9 @@
-.logo {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  width: 90px;
-  height: auto;
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.header > img {
+  margin-top: 16px;
+  margin-bottom: 20px;
 }

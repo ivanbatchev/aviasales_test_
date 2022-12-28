@@ -1,20 +1,12 @@
 .more {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  background-color: #2196f9;
-  border: 1px solid #2196f9;
+  width: clamp(240px, 98%, 502px);
+  margin: 16px 0;
+  height: 50px;
+  background-color: #2196f3;
   border-radius: 5px;
-  height: 48px;
-  width: 100%;
-  transition: all ease-in-out 0.15s;
-}
-
-.more:hover {
-  background-color: #197aca;
-}
-
-.more:active {
-  background-color: #197aca9c;
+  border: 1px solid #2196f3;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1.4px;
+  color: white;
 }

@@ -10,10 +10,7 @@ import classes from './Main.module.scss'
 const Main = () => {
   return (
     <main className={classes.main}>
-      <aside>
-        <JumpsCheckForm />
-      </aside>
-
+      <JumpsCheckForm />
       <div className={classes.wrapper}>
         <TicketsFilter />
         <TicketList />

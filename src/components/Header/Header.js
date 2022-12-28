@@ -6,7 +6,7 @@ import classes from './Header.module.scss'
 
 const Header = () => {
   return (
-    <header>
+    <header className={classes.header}>
       <img src={logo} alt="logo" className={classes.logo}></img>
     </header>
   )
