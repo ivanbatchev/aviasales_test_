@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { filterChanged } from '../../actions'
+import { checkboxChanged } from '../../actions'
 
 import classes from './JumpsCheckForm.module.scss'
 
-const JumpsCheckForm = ({ filter, filterChanged }) => {
-  const handleFilterChange = ({ target }) => {
-    const allFiltersChecked = { all: true, nojumps: true, onejump: true, twojumps: true, threejumps: true }
+const JumpsCheckForm = ({ checkbox, checkboxChanged }) => {
+  const handleCheckboxChange = ({ target }) => {
+    const allCheckboxesChecked = { all: true, nojumps: true, onejump: true, twojumps: true, threejumps: true }
 
-    const allFiltersUnchecked = { all: false, nojumps: false, onejump: false, twojumps: false, threejumps: false }
+    const allCheckboxesUnchecked = { all: false, nojumps: false, onejump: false, twojumps: false, threejumps: false }
 
     const currentStateWithNoAll = {
       nojumps: document.getElementById('nojumps').checked,
@@ -21,22 +21,20 @@ const JumpsCheckForm = ({ filter, filterChanged }) => {
     switch (target.id) {
       case 'all':
         if (target.checked) {
-          filterChanged(allFiltersChecked)
+          checkboxChanged(allCheckboxesChecked)
         } else {
-          filterChanged(allFiltersUnchecked)
+          checkboxChanged(allCheckboxesUnchecked)
         }
         break
       default:
-        if (filter.all && target.id) {
-          filterChanged({ ...filter, all: false, [target.id]: !filter[target.id] })
+        if (checkbox.all && target.id) {
+          checkboxChanged({ ...checkbox, all: false, [target.id]: !checkbox[target.id] })
         }
-        if (!filter.all && target.id) {
-          filterChanged({ ...filter, all: false, [target.id]: !filter[target.id] })
+        if (!checkbox.all && target.id) {
+          checkboxChanged({ ...checkbox, all: false, [target.id]: !checkbox[target.id] })
         }
-        if (!filter.all) {
-          if (Object.values(currentStateWithNoAll).every((value) => value === true)) {
-            filterChanged(allFiltersChecked)
-          }
+        if (!checkbox.all && Object.values(currentStateWithNoAll).every((value) => value === true)) {
+          checkboxChanged(allCheckboxesChecked)
         }
     }
   }
@@ -46,27 +44,27 @@ const JumpsCheckForm = ({ filter, filterChanged }) => {
       <form className={classes.form}>
         <h4>Количество пересадок</h4>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="all" checked={filter.all} onChange={handleFilterChange} />
+          <input type="checkbox" id="all" checked={checkbox.all} onChange={handleCheckboxChange} />
           <span className={classes.checkmark}></span>
           <label htmlFor="all">Все</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="nojumps" checked={filter.nojumps} onChange={handleFilterChange} />
+          <input type="checkbox" id="nojumps" checked={checkbox.nojumps} onChange={handleCheckboxChange} />
           <span className={classes.checkmark}></span>
           <label htmlFor="nojumps">Без пересадок</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="onejump" checked={filter.onejump} onChange={handleFilterChange} />
+          <input type="checkbox" id="onejump" checked={checkbox.onejump} onChange={handleCheckboxChange} />
           <span className={classes.checkmark}></span>
           <label htmlFor="onejump">1 пересадка</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="twojumps" checked={filter.twojumps} onChange={handleFilterChange} />
+          <input type="checkbox" id="twojumps" checked={checkbox.twojumps} onChange={handleCheckboxChange} />
           <span className={classes.checkmark}></span>
           <label htmlFor="twojumps">2 пересадки</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="threejumps" checked={filter.threejumps} onChange={handleFilterChange} />
+          <input type="checkbox" id="threejumps" checked={checkbox.threejumps} onChange={handleCheckboxChange} />
           <span className={classes.checkmark}></span>
           <label htmlFor="threejumps">3 пересадки</label>
         </div>
@@ -75,14 +73,14 @@ const JumpsCheckForm = ({ filter, filterChanged }) => {
   )
 }
 
-const mapStateToProps = ({ filter, tickets }) => {
+const mapStateToProps = ({ checkbox, tickets }) => {
   return {
-    filter,
+    checkbox,
     tickets,
   }
 }
 
 const mapDispatchToProps = {
-  filterChanged,
+  checkboxChanged,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(JumpsCheckForm)

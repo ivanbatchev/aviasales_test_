@@ -1,45 +1,57 @@
 const initialState = {
   tickets: [],
+  nomoreTicketsToLoad: false,
+  searchId: '',
   loading: true,
   error: null,
-  filter: {
-    all: false,
-    nojumps: false,
-    onejump: false,
-    twojumps: false,
-    threejumps: false,
+  checkbox: {
+    all: true,
+    nojumps: true,
+    onejump: true,
+    twojumps: true,
+    threejumps: true,
   },
+  filter: 'CHEAPEST',
+  ticketsToRender: 5,
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'TICKETS_LOADED':
+    case 'TICKETS_LOADED': {
       return {
-        tickets: action.payload,
+        ...state,
+        tickets: [...state.tickets, ...action.payload],
         loading: false,
-        error: null,
-        filter: state.filter,
+        nomoreTicketsToLoad: action.meta,
       }
+    }
 
     case 'TICKETS_REQUESTED':
       return {
-        tickets: state.tickets,
+        ...state,
         loading: true,
-        error: null,
-        filter: state.filter,
+        searchId: action.payload,
       }
 
     case 'TICKETS_ERROR':
       return {
-        tickets: state.tickets,
+        ...state,
         loading: false,
         error: action.payload,
-        filter: state.filter,
       }
 
-    case 'FILTER_CHANGED':
-      return { ...state, loading: false, filter: action.payload }
+    case 'CHECKBOX_CHANGED':
+      return { ...state, loading: false, checkbox: action.payload }
 
+    case 'FILTER_CHANGED':
+      return { ...state, loading: false, filter: action.payload, ticketsToRender: action.meta }
+
+    case 'TICKETS_TO_SHOW_CHANGED':
+      return { ...state, loading: false, ticketsToRender: state.ticketsToRender + action.payload }
+
+    case 'FILTER_CHANGED_RESET_SHOWN_TICKETS': {
+      return { ...state, loading: false, ticketsToRender: 5 }
+    }
     default:
       return state
   }

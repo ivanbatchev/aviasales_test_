@@ -1,13 +1,15 @@
-const ticketsLoaded = (newTickets) => {
+const ticketsLoaded = (newTickets, stop) => {
   return {
     type: 'TICKETS_LOADED',
     payload: newTickets,
+    meta: stop,
   }
 }
 
-const ticketsRequested = () => {
+const ticketsRequested = (searchId) => {
   return {
     type: 'TICKETS_REQUESTED',
+    payload: searchId,
   }
 }
 
@@ -18,11 +20,26 @@ const ticketsError = (error) => {
   }
 }
 
+const checkboxChanged = (checkboxStates) => {
+  return {
+    type: 'CHECKBOX_CHANGED',
+    payload: checkboxStates,
+  }
+}
+
 const filterChanged = (filterState) => {
   return {
     type: 'FILTER_CHANGED',
     payload: filterState,
+    meta: 5,
   }
 }
 
-export { ticketsLoaded, ticketsRequested, ticketsError, filterChanged }
+const changeTicketsNumber = () => {
+  return {
+    type: 'TICKETS_TO_SHOW_CHANGED',
+    payload: 5,
+  }
+}
+
+export { ticketsLoaded, ticketsRequested, ticketsError, checkboxChanged, filterChanged, changeTicketsNumber }
