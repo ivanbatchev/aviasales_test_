@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Box from '@mui/material/Box'
 import LinearProgress from '@mui/material/LinearProgress'
+import uuid from 'react-uuid'
 
 import ShowMoreButton from '../ShowMoreButton'
 import Spinner from '../Spinner'
 import { ticketsError } from '../../actions'
-import { asyncTicketRequested, getTickets } from '../../actions/asyncActions'
+import { getTickets, asyncTicketRequested } from '../../actions/asyncActions'
 import { compose } from '../../utils'
 import Ticket from '../Ticket'
 
@@ -77,59 +79,44 @@ const visibleTickets = (tickets, filterValue, nomoreTicketsToLoad, ticketsToRend
 }
 
 const TicketList = ({
-  loading,
-  asyncTicketRequested,
-  searchId,
+  status,
   getTickets,
   tickets,
   ticketsToRender,
-  nomoreTicketsToLoad,
+  stopLoading,
   filter,
   checkbox,
+  asyncTicketRequested,
+  searchId,
 }) => {
-  // Request spinner and searchId for further loading
-  //============================================================
   useEffect(() => {
     asyncTicketRequested()
-  }, [asyncTicketRequested])
-
-  // Getting tickets async when it's done need to clear interval
-  //============================================================
-  const intervalRef = useRef()
-  useEffect(() => {
-    if (searchId !== '') {
-      intervalRef.current = setInterval(() => {
-        getTickets(searchId)
-      }, 350)
-    }
-  }, [getTickets, searchId])
+  }, [])
 
   useEffect(() => {
-    if (nomoreTicketsToLoad) {
-      clearInterval(intervalRef.current)
+    if (searchId && !stopLoading) {
+      getTickets()
     }
-  })
+  }, [tickets, searchId])
 
-  // Show spinner on loading & show data when not
-  //============================================================
-  if (loading) {
+  if (status === 'loading') {
     return <Spinner />
   }
-  //============================================================
+
   const ticketsToRenderWithStops = (tickets) => {
     const { all, nojumps, onejump, twojumps, threejumps } = checkbox
     const result = []
     const nojumpsTickets = tickets.filter(
-      (ticket) => ticket.segments[0].stops.length === 0 && ticket.segments[1].stops.length === 0
+      (ticket) => ticket.segments[0].stops.length === 0 || ticket.segments[1].stops.length === 0
     )
     const onejumpTickets = tickets.filter(
-      (ticket) => ticket.segments[0].stops.length === 1 && ticket.segments[1].stops.length === 1
+      (ticket) => ticket.segments[0].stops.length === 1 || ticket.segments[1].stops.length === 1
     )
     const twojumpsTickets = tickets.filter(
-      (ticket) => ticket.segments[0].stops.length === 2 && ticket.segments[1].stops.length === 2
+      (ticket) => ticket.segments[0].stops.length === 2 || ticket.segments[1].stops.length === 2
     )
     const threejumpsTickets = tickets.filter(
-      (ticket) => ticket.segments[0].stops.length === 3 && ticket.segments[1].stops.length === 3
+      (ticket) => ticket.segments[0].stops.length === 3 || ticket.segments[1].stops.length === 3
     )
 
     if (all) {
@@ -148,20 +135,17 @@ const TicketList = ({
     if (threejumps) {
       result.push(...threejumpsTickets)
     }
-
     return result
   }
 
   return (
     <>
       <section className={classes.ticketlist}>
-        {!nomoreTicketsToLoad && <LinearIndeterminate />}
+        {!stopLoading && <LinearIndeterminate />}
         {ticketsToRenderWithStops(tickets).length !== 0 ? (
-          visibleTickets(ticketsToRenderWithStops(tickets), filter, nomoreTicketsToLoad, ticketsToRender).map(
-            (ticket) => {
-              return <Ticket ticket={ticket} key={ticket.price + ticket.carrier + ticket.segments[0].date} />
-            }
-          )
+          visibleTickets(ticketsToRenderWithStops(tickets), filter, stopLoading, ticketsToRender).map((ticket) => {
+            return <Ticket ticket={ticket} key={uuid()} />
+          })
         ) : (
           <h2>No tickets were found</h2>
         )}
@@ -171,14 +155,14 @@ const TicketList = ({
   )
 }
 
-const mapStateToProps = ({ tickets, loading, searchId, ticketsToRender, nomoreTicketsToLoad, filter, checkbox }) => {
+const mapStateToProps = ({ tickets, status, searchId, ticketsToRender, stopLoading, filter, checkbox }) => {
   return {
     filter,
     tickets,
-    loading,
+    status,
     searchId,
     ticketsToRender,
-    nomoreTicketsToLoad,
+    stopLoading,
     checkbox,
   }
 }

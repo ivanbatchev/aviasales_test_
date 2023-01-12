@@ -1,3 +1,3 @@
-import { TicketServiceProvider, TicketServiceConsumer } from './TicketServiceContext'
-
-export { TicketServiceProvider, TicketServiceConsumer }
+import TicketContext, { TicketServiceProvider, TicketServiceConsumer } from './TicketServiceContext'
+export default TicketContext
+export { TicketServiceConsumer, TicketServiceProvider }

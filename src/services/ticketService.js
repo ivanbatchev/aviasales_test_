@@ -1,21 +1,25 @@
 export default class TicketService {
+  urlBase = 'https://aviasales-test-api.kata.academy'
+  controller = new AbortController()
+
   getSearchId = async () => {
-    try {
-      const response = await fetch('https://aviasales-test-api.kata.academy/search')
+    const response = await fetch(`${this.urlBase}/search`, { signal: this.controller.signal })
+    if (response.ok) {
       const result = await response.json()
       return result.searchId
-    } catch (error) {
-      throw new Error('can not get search id', error)
     }
+    this.controller.abort()
   }
 
   getTickets = async (searchId) => {
-    const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-    if (response.status === 200) {
+    const response = await fetch(`${this.urlBase}/tickets?searchId=${searchId}`, { signal: this.controller.signal })
+    if (response.ok) {
       const result = await response.json()
       return result
-    } else {
-      return new Error('can not get tickets')
     }
+    if (!response.ok) {
+      return { tickets: [], stop: false }
+    }
+    this.controller.abort()
   }
 }
