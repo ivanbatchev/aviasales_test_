@@ -1,8 +1,17 @@
+import {
+  TICKETS_LOADED,
+  TICKETS_REQUESTED,
+  TICKETS_ERROR,
+  CHECKBOX_CHANGED,
+  FILTER_CHANGED,
+  TICKETS_TO_SHOW_CHANGED,
+} from '../actions/actionTypes'
+
 const initialState = {
   tickets: [],
-  nomoreTicketsToLoad: false,
-  searchId: '',
-  loading: true,
+  stopLoading: false,
+  searchId: null,
+  status: 'loading',
   error: null,
   checkbox: {
     all: true,
@@ -17,41 +26,38 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'TICKETS_LOADED': {
+    case TICKETS_LOADED: {
       return {
         ...state,
         tickets: [...state.tickets, ...action.payload],
-        loading: false,
-        nomoreTicketsToLoad: action.meta,
+        status: 'success',
+        stopLoading: action.meta,
       }
     }
 
-    case 'TICKETS_REQUESTED':
+    case TICKETS_REQUESTED:
       return {
         ...state,
-        loading: true,
+        status: 'loading',
         searchId: action.payload,
       }
 
-    case 'TICKETS_ERROR':
+    case TICKETS_ERROR:
       return {
         ...state,
-        loading: false,
+        status: 'error',
         error: action.payload,
       }
 
-    case 'CHECKBOX_CHANGED':
-      return { ...state, loading: false, checkbox: action.payload }
+    case CHECKBOX_CHANGED:
+      return { ...state, status: 'success', checkbox: action.payload }
 
-    case 'FILTER_CHANGED':
-      return { ...state, loading: false, filter: action.payload, ticketsToRender: action.meta }
+    case FILTER_CHANGED:
+      return { ...state, status: 'success', filter: action.payload, ticketsToRender: action.meta }
 
-    case 'TICKETS_TO_SHOW_CHANGED':
-      return { ...state, loading: false, ticketsToRender: state.ticketsToRender + action.payload }
+    case TICKETS_TO_SHOW_CHANGED:
+      return { ...state, status: 'success', ticketsToRender: state.ticketsToRender + action.payload }
 
-    case 'FILTER_CHANGED_RESET_SHOWN_TICKETS': {
-      return { ...state, loading: false, ticketsToRender: 5 }
-    }
     default:
       return state
   }

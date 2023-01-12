@@ -1,5 +1,6 @@
 import { ticketsRequested, ticketsLoaded, ticketsError } from '../actions'
 import TicketService from '../services/ticketService'
+import store from '../store'
 
 const ticketService = new TicketService()
 
@@ -16,15 +17,32 @@ export const asyncTicketRequested = () => {
   }
 }
 
-export const getTickets = (searchId) => {
+export const getTickets = () => {
   return (dispatch) => {
-    ticketService
-      .getTickets(searchId)
-      .then((tickets) => {
-        dispatch(ticketsLoaded(tickets.tickets, tickets.stop))
+    if (!store.getState().stopLoading) {
+      ticketService.getTickets(store.getState().searchId).then((result) => {
+        try {
+          if (result.tickets) {
+            dispatch(ticketsLoaded(result.tickets, result.stop))
+          }
+        } catch (e) {
+          console.log(e)
+        }
       })
-      .catch((error) => {
-        dispatch(ticketsError(error))
-      })
+    }
   }
 }
+// store.subscribe(() => {
+//   if (store.getState().searchId) {
+//     const searchId = store.getState().searchId
+//     ticketService.getTickets(searchId).then((res) => {
+//       try {
+//         res.json().then((result) => {
+//           dispatch(ticketsLoaded(result.tickets, result.stop))
+//         })
+//       } catch (error) {
+//         console.log(error)
+//       }
+//     })
+//   }
+// })

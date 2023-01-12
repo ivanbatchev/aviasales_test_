@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { withTicketService } from './components/hoc'
 import Header from './components/Header'
 import classes from './App.module.scss'
 import Main from './components/Main'
 
-const App = ({ ticketService }) => {
+const App = () => {
   return (
     <div className={classes.app}>
       <Header />
@@ -13,4 +12,4 @@ const App = ({ ticketService }) => {
     </div>
   )
 }
-export default withTicketService()(App)
+export default App

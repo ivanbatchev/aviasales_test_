@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import { checkboxChanged } from '../../actions'
@@ -6,37 +6,35 @@ import { checkboxChanged } from '../../actions'
 import classes from './JumpsCheckForm.module.scss'
 
 const JumpsCheckForm = ({ checkbox, checkboxChanged }) => {
-  const handleCheckboxChange = ({ target }) => {
-    const allCheckboxesChecked = { all: true, nojumps: true, onejump: true, twojumps: true, threejumps: true }
-
-    const allCheckboxesUnchecked = { all: false, nojumps: false, onejump: false, twojumps: false, threejumps: false }
-
-    const currentStateWithNoAll = {
-      nojumps: document.getElementById('nojumps').checked,
-      onejump: document.getElementById('onejump').checked,
-      twojumps: document.getElementById('twojumps').checked,
-      threejumps: document.getElementById('threejumps').checked,
+  const [filtersState, setFiltersState] = useState({
+    all: true,
+    nojumps: true,
+    onejump: true,
+    twojumps: true,
+    threejumps: true,
+  })
+  const handleChekboxes = ({ target: checkboxTarget }) => {
+    let result = {}
+    const allFiltersChecked = { all: true, nojumps: true, onejump: true, twojumps: true, threejumps: true }
+    const noFiltersChecked = { all: false, nojumps: false, onejump: false, twojumps: false, threejumps: false }
+    if (checkboxTarget.id === 'all') {
+      if (checkboxTarget.checked) {
+        result = allFiltersChecked
+        setFiltersState(allFiltersChecked)
+      } else {
+        result = noFiltersChecked
+        setFiltersState(noFiltersChecked)
+      }
+    } else {
+      result = { ...filtersState, all: false, [checkboxTarget.id]: !filtersState[checkboxTarget.id] }
+      setFiltersState({ ...filtersState, all: false, [checkboxTarget.id]: !filtersState[checkboxTarget.id] })
+      const { all, ...otherfiltersState } = result
+      if (!all && Object.values(otherfiltersState).every((value) => value === true)) {
+        result = allFiltersChecked
+        setFiltersState(allFiltersChecked)
+      }
     }
-
-    switch (target.id) {
-      case 'all':
-        if (target.checked) {
-          checkboxChanged(allCheckboxesChecked)
-        } else {
-          checkboxChanged(allCheckboxesUnchecked)
-        }
-        break
-      default:
-        if (checkbox.all && target.id) {
-          checkboxChanged({ ...checkbox, all: false, [target.id]: !checkbox[target.id] })
-        }
-        if (!checkbox.all && target.id) {
-          checkboxChanged({ ...checkbox, all: false, [target.id]: !checkbox[target.id] })
-        }
-        if (!checkbox.all && Object.values(currentStateWithNoAll).every((value) => value === true)) {
-          checkboxChanged(allCheckboxesChecked)
-        }
-    }
+    checkboxChanged(result)
   }
 
   return (
@@ -44,27 +42,27 @@ const JumpsCheckForm = ({ checkbox, checkboxChanged }) => {
       <form className={classes.form}>
         <h4>Количество пересадок</h4>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="all" checked={checkbox.all} onChange={handleCheckboxChange} />
+          <input type="checkbox" id="all" onChange={handleChekboxes} checked={checkbox.all} />
           <span className={classes.checkmark}></span>
           <label htmlFor="all">Все</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="nojumps" checked={checkbox.nojumps} onChange={handleCheckboxChange} />
+          <input type="checkbox" id="nojumps" onChange={handleChekboxes} checked={checkbox.nojumps} />
           <span className={classes.checkmark}></span>
           <label htmlFor="nojumps">Без пересадок</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="onejump" checked={checkbox.onejump} onChange={handleCheckboxChange} />
+          <input type="checkbox" id="onejump" onChange={handleChekboxes} checked={checkbox.onejump} />
           <span className={classes.checkmark}></span>
           <label htmlFor="onejump">1 пересадка</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="twojumps" checked={checkbox.twojumps} onChange={handleCheckboxChange} />
+          <input type="checkbox" id="twojumps" onChange={handleChekboxes} checked={checkbox.twojumps} />
           <span className={classes.checkmark}></span>
           <label htmlFor="twojumps">2 пересадки</label>
         </div>
         <div className={classes.cbcontainer}>
-          <input type="checkbox" id="threejumps" checked={checkbox.threejumps} onChange={handleCheckboxChange} />
+          <input type="checkbox" id="threejumps" onChange={handleChekboxes} checked={checkbox.threejumps} />
           <span className={classes.checkmark}></span>
           <label htmlFor="threejumps">3 пересадки</label>
         </div>
@@ -73,10 +71,9 @@ const JumpsCheckForm = ({ checkbox, checkboxChanged }) => {
   )
 }
 
-const mapStateToProps = ({ checkbox, tickets }) => {
+const mapStateToProps = ({ checkbox }) => {
   return {
     checkbox,
-    tickets,
   }
 }
 
